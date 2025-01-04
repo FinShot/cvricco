@@ -1,9 +1,0 @@
-fastapi
-uvicorn
-websockets
-openai
-python-dotenv
-pinecone-client
-redis
-beautifulsoup4
-requests

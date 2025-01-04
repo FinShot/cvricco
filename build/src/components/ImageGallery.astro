@@ -1,0 +1,181 @@
+---
+interface Props {
+  images: {
+    thumbnail: string;
+    full: string;
+    alt: string;
+  }[];
+}
+
+const { images } = Astro.props;
+---
+
+<div class="gallery" data-images={JSON.stringify(images)}>
+  {images.map((image, index) => (
+    <div class="gallery-item" data-index={index} data-aos="fade-up" data-aos-delay={index * 100}>
+      <div class="image-wrapper">
+        <img 
+          src={image.thumbnail} 
+          alt={image.alt} 
+          loading="lazy" 
+          class="thumbnail"
+          onload="this.style.opacity='1'"
+        />
+      </div>
+    </div>
+  ))}
+</div>
+
+<script>
+  let currentGallery = null;
+  let currentIndex = 0;
+
+  function initGalleries() {
+    const galleries = document.querySelectorAll('.gallery');
+    const lightbox = document.getElementById('global-lightbox');
+    const lightboxImage = lightbox?.querySelector('.lightbox-image');
+    const closeButton = lightbox?.querySelector('.close-button');
+    const prevButton = lightbox?.querySelector('.prev');
+    const nextButton = lightbox?.querySelector('.next');
+
+    function showImage(gallery, index) {
+      const images = JSON.parse(gallery.dataset.images || '[]');
+      currentIndex = index;
+      const image = images[index];
+      
+      if (lightboxImage instanceof HTMLImageElement) {
+        lightboxImage.classList.remove('loaded');
+        lightboxImage.src = image.full;
+        lightboxImage.alt = image.alt;
+        lightboxImage.onload = () => lightboxImage.classList.add('loaded');
+      }
+
+      if (prevButton && nextButton) {
+        (prevButton as HTMLElement).style.display = index === 0 ? 'none' : 'flex';
+        (nextButton as HTMLElement).style.display = index === images.length - 1 ? 'none' : 'flex';
+      }
+    }
+
+    galleries.forEach(gallery => {
+      const galleryItems = gallery.querySelectorAll('.gallery-item');
+
+      galleryItems.forEach((item, index) => {
+        item.addEventListener('click', () => {
+          currentGallery = gallery;
+          currentIndex = index;
+          showImage(gallery, currentIndex);
+          if (lightbox) {
+            document.body.style.overflow = 'hidden';
+            lightbox.classList.add('active');
+          }
+        });
+      });
+    });
+
+    closeButton?.addEventListener('click', () => {
+      if (lightbox) {
+        document.body.style.overflow = '';
+        lightbox.classList.remove('active');
+        if (lightboxImage) {
+          lightboxImage.classList.remove('loaded');
+        }
+        currentGallery = null;
+      }
+    });
+
+    prevButton?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (currentGallery && currentIndex > 0) {
+        showImage(currentGallery, currentIndex - 1);
+      }
+    });
+
+    nextButton?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (currentGallery) {
+        const images = JSON.parse(currentGallery.dataset.images || '[]');
+        if (currentIndex < images.length - 1) {
+          showImage(currentGallery, currentIndex + 1);
+        }
+      }
+    });
+
+    lightbox?.addEventListener('click', (e) => {
+      if (e.target === lightbox) {
+        document.body.style.overflow = '';
+        lightbox.classList.remove('active');
+        if (lightboxImage) {
+          lightboxImage.classList.remove('loaded');
+        }
+        currentGallery = null;
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox?.classList.contains('active')) return;
+
+      if (e.key === 'Escape') {
+        document.body.style.overflow = '';
+        lightbox.classList.remove('active');
+        if (lightboxImage) {
+          lightboxImage.classList.remove('loaded');
+        }
+        currentGallery = null;
+      } else if (e.key === 'ArrowLeft' && currentGallery && currentIndex > 0) {
+        showImage(currentGallery, currentIndex - 1);
+      } else if (e.key === 'ArrowRight' && currentGallery) {
+        const images = JSON.parse(currentGallery.dataset.images || '[]');
+        if (currentIndex < images.length - 1) {
+          showImage(currentGallery, currentIndex + 1);
+        }
+      }
+    });
+  }
+
+  // Initialize galleries when the DOM is loaded
+  document.addEventListener('DOMContentLoaded', initGalleries);
+</script>
+
+<style>
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.8rem;
+    padding: 0.8rem 0;
+  }
+
+  .gallery-item {
+    position: relative;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  .image-wrapper {
+    width: 100%;
+    height: 100%;
+    background: #f0f0f0;
+    position: relative;
+  }
+
+  .thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .gallery-item:hover {
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 768px) {
+    .gallery {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0.5rem;
+    }
+  }
+</style>

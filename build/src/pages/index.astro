@@ -1,0 +1,65 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import ExperienceCard from '../components/ExperienceCard.astro';
+import { client, urlFor } from '../lib/sanity';
+
+// Fetch experiences from Sanity
+const experiences = await client.fetch(`
+  *[_type == "experience"] | order(order asc) {
+    company,
+    role,
+    period,
+    description,
+    sectionId,
+    order,
+    images[] {
+      asset,
+      alt
+    }
+  }
+`);
+
+// Add debug log to check the order
+console.log('Experiences order:', experiences.map(exp => ({
+  company: exp.company,
+  order: exp.order
+})));
+
+// Transform the images to the format your ExperienceCard expects
+const transformedExperiences = experiences.map(exp => ({
+  ...exp,
+  images: exp.images.map(img => ({
+    thumbnail: urlFor(img.asset)
+      .width(800)
+      .height(450)
+      .quality(90)
+      .url(),
+    full: urlFor(img.asset)
+      .width(1920)
+      .height(1080)
+      .quality(95)
+      .url(),
+    alt: img.alt
+  }))
+}));
+---
+
+<Layout title="Ricco Yeung - Portfolio">
+	<main>
+		<Hero />
+		<section class="timeline">
+			{transformedExperiences.map((experience) => (
+				<ExperienceCard
+					id={experience.company.toLowerCase().replace(/\s+/g, '')}
+					company={experience.company}
+					role={experience.role}
+					period={experience.period}
+					description={experience.description}
+					sectionId={experience.sectionId}
+					images={experience.images}
+				/>
+			))}
+		</section>
+	</main>
+</Layout>

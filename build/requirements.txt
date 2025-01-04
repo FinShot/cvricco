@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+python-dotenv
+openai
+websockets
+beautifulsoup4
+requests 

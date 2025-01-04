@@ -1,0 +1,182 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  icon: string;
+  content: {
+    description: string;
+    details: string[];
+    images: {
+      url: string;
+      alt: string;
+    }[];
+  };
+}
+
+const { id, title, icon, content } = Astro.props;
+---
+
+<div id={`modal-${id}`} class="modal">
+  <div class="modal-content" data-aos="fade-up">
+    <div class="modal-header">
+      <span class="icon">{icon}</span>
+      <h2>{title}</h2>
+      <button class="close-btn">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p class="description">{content.description}</p>
+      <div class="details">
+        {content.details.map(detail => (
+          <div class="detail-item">
+            <span class="bullet">•</span>
+            <p>{detail}</p>
+          </div>
+        ))}
+      </div>
+      <div class="image-grid">
+        {content.images.map(image => (
+          <div class="image-wrapper">
+            <img src={image.url} alt={image.alt} loading="lazy" />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+  }
+
+  .modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-content {
+    background: var(--card-background);
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    color: var(--text-dark);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-header {
+    padding: 1.5rem;
+    background: var(--gradient);
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+
+  .modal-header h2 {
+    margin: 0;
+    flex-grow: 1;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    line-height: 1;
+  }
+
+  .modal-body {
+    padding: 2rem 2rem 3rem;
+    overflow-y: auto;
+    flex-grow: 1;
+  }
+
+  .description {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    margin-bottom: 1.5rem;
+  }
+
+  .details {
+    margin-bottom: 1.5rem;
+  }
+
+  .detail-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .bullet {
+    color: var(--primary);
+    font-weight: bold;
+    flex-shrink: 0;
+    padding-top: 0;
+    font-size: 1.2rem;
+    line-height: 1;
+  }
+
+  .detail-item p {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    margin: 0;
+    flex-grow: 1;
+    padding-top: 0.1rem;
+  }
+
+  .image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    padding-bottom: 1rem;
+  }
+
+  .image-wrapper {
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    border-radius: 10px;
+  }
+
+  .image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .image-wrapper img:hover {
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 768px) {
+    .modal-content {
+      width: 95%;
+    }
+    
+    .modal-body {
+      padding: 1.5rem 1.5rem 2.5rem;
+    }
+
+    .image-grid {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+  }
+</style>

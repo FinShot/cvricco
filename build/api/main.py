@@ -72,9 +72,16 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
     
     try:
         while True:
+            print("Waiting for message...")
             message = await websocket.receive_text()
             print(f"Received message: {message}")
-            await websocket.send_text("typing")
+            
+            try:
+                await websocket.send_text("typing")
+                print("Sent typing indicator")
+            except Exception as send_error:
+                print(f"Error sending typing indicator: {send_error}")
+                break
             
             print("Calling OpenAI API...")
             try:
@@ -94,21 +101,34 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
                 
                 # Extract the response directly from the message content
                 ai_response = response.choices[0].message.content
+                print(f"AI Response: {ai_response[:100]}...")
                 
                 conversation_history.append({"role": "user", "content": message})
                 conversation_history.append({"role": "assistant", "content": ai_response})
                 
-                await websocket.send_text(ai_response)
+                try:
+                    await websocket.send_text(ai_response)
+                    print("Sent AI response successfully")
+                except Exception as send_error:
+                    print(f"Error sending AI response: {send_error}")
+                    break
                 
             except Exception as api_error:
                 print(f"OpenAI API Error: {api_error}")
-                await websocket.send_text("Sorry, I'm having trouble processing your message right now. Please try again.")
+                try:
+                    await websocket.send_text("Sorry, I'm having trouble processing your message right now. Please try again.")
+                except Exception as send_error:
+                    print(f"Error sending error message: {send_error}")
+                    break
             
     except WebSocketDisconnect:
         print(f"Client {client_id} disconnected normally")
     except Exception as e:
         print(f"WebSocket Error: {e}")
-        # Don't try to close the connection, just let it handle itself
+        import traceback
+        print(f"Full traceback: {traceback.format_exc()}")
+    finally:
+        print(f"WebSocket connection ended for {client_id}")
 
 if __name__ == "__main__":
     import uvicorn

@@ -1,4 +1,4 @@
-from fastapi import FastAPI, WebSocket
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 import json
 import os
@@ -104,12 +104,11 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
                 print(f"OpenAI API Error: {api_error}")
                 await websocket.send_text("Sorry, I'm having trouble processing your message right now. Please try again.")
             
+    except WebSocketDisconnect:
+        print(f"Client {client_id} disconnected normally")
     except Exception as e:
         print(f"WebSocket Error: {e}")
-        try:
-            await websocket.close()
-        except:
-            pass
+        # Don't try to close the connection, just let it handle itself
 
 if __name__ == "__main__":
     import uvicorn

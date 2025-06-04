@@ -44,8 +44,11 @@ app.add_middleware(
 
 @app.websocket("/ws/{client_id}")
 async def websocket_endpoint(websocket: WebSocket, client_id: str):
+    print(f"New connection from {client_id}")
     await websocket.accept()
+    print("WebSocket accepted")
     
+    print("Starting with website content length:", len(website_content))
     system_prompt = f"""[RICCO_YEUNG_CV_PAGE_ASSISTANT_ONLY]
     You are Ricco Yeung's CV assistant. Here is his CV content:
     {website_content}
@@ -65,12 +68,15 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
     conversation_history = [
         {"role": "system", "content": system_prompt}
     ]
+    print("Conversation history initialized")
     
     try:
         while True:
             message = await websocket.receive_text()
+            print(f"Received message: {message}")
             await websocket.send_text("typing")
             
+            print("Calling OpenAI API...")
             response = client.chat.completions.create(
                 model="gpt-4-turbo-preview",
                 messages=conversation_history + [
@@ -98,6 +104,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
                 max_tokens=75,
                 temperature=0.7
             )
+            print("Got response from OpenAI")
             
             # Extract the response from the function call
             function_response = response.choices[0].message.function_call.arguments

@@ -1,0 +1,345 @@
+---
+import Layout from '../layouts/Layout.astro';
+import VideoSection from '../components/VideoSection.astro';
+
+// Video data structure for each company
+const videoData = [
+  {
+    company: "Wondershare Technology Inc.",
+    sectionId: "wondershare-videos",
+    videos: [
+      {
+        id: "1",
+        vimeoId: "1090597816", // Demo video with working thumbnail
+        title: "Filmora 14 Launch Video",
+        description: "I co-led the GTM strategy for Filmora Version 14, which included creating this promotional introduction video. My team and I developed the storyboard and creative direction, resulting in a clean, focused narrative tailored to our key target segments.",
+        role: "Co-creative Director, Storyboard, Scriptwriter, Post-production Supervisor",
+        featured: true
+      }
+    ]
+  },
+  {
+    company: "Intergalactic Agency Inc.",
+    sectionId: "intergalactic-videos", 
+    videos: [
+      {
+        id: "2",
+        vimeoId: "1090606107", // Demo video with working thumbnail
+        title: "Intergalactic Agency Promo Video",
+        description: "I produced this promotional video for Intergalactic Agency during my first month, aimed at generating qualified leads and enhancing client pitch presentations. Video clips used were from Intergalactic's existing library or from clients.",
+        role: "Sole Production - Video Producer, Creative Director, Video Editor, Motion Graphics Designer",
+        featured: true
+      },
+      {
+        id: "12",
+        vimeoId: "811096037", // Demo video with working thumbnail
+        title: "Montreal Mural Festival App Award Entry Video",
+        description: "I created this submission video for an app we developed for the Montreal Mural Festival called Mural App. It earned a Webby Award for Best AR/VR Experience.",
+        role: "Sole Production - Video Producer, Creative Director, Video Editor, Motion Graphics Designer"
+      },
+      {
+        id: "13",
+        vimeoId: "1090649015", // Demo video with working thumbnail
+        title: "Station Casinos Project Showcase",
+        description: "I created this showcase video for our blockchain-based customer rewards project developed for Station Casinos. It was used to demonstrate our capabilities in blockchain and tokenization technology.",
+        role: "Sole Production - Video Producer, Creative Director, Video Editor, Motion Graphics Designer"
+      }
+    ]
+  },
+  {
+    company: "Tokyo 2020",
+    sectionId: "tokyo2020-videos",
+    videos: [
+      {
+        id: "3",
+        vimeoId: "1090600772", // Demo video with working thumbnail
+        title: "Tokyo 2020 Brand Property: Look of the Games",
+        description: "As the Tokyo 2020 Games finished, the brand development team decided to submit the Look of the Games for design award competitions. I was entrusted with creating the entry video, working under the direction of Brand Director Kouichi Sawada, best known as the former Design Director of UNIQLO.",
+        role: "Video Producer, Storyboard, Scriptwriter, Narration Voice, Video Editor",
+        featured: true
+      },
+      {
+        id: "4", 
+        vimeoId: "1090602563", // Demo video with working thumbnail
+        title: "Tokyo 2020 Brand Property: Sport Pictograms",
+        description: "Similar to the Look of the Games award entry video, I was tasked with creating one for the Olympic Sport Pictograms. Once again, under the direction of Brand Director Sawada-san, I produced this video. Once again, the video is narrated by me",
+        role: "Video Producer, Storyboard, Scriptwriter, Narration Voice, Video Editor"
+      },
+      {
+        id: "5",
+        vimeoId: "1090607619", // Demo video with working thumbnail
+        title: "Torch Relay Event Coverage Video",
+        description: "During the COVID crisis, external video production was halted, and in-house work was assigned to the remaining Tokyo 2020 Organising Committee members still employed. As one of the only English-speaking staff with video production experience, I was asked to assist on-location and edit the Olympic Torch Relay explanation video.",
+        role: "Camera Operating Assistant, Boom Operator, Video Editor"
+      }
+    ]
+  },
+  {
+    company: "CK Marketing Solutions Inc.",
+    sectionId: "ckmarketing-videos",
+    videos: [
+      {
+        id: "6",
+        vimeoId: "1090624428", // Demo video with working thumbnail
+        title: "Yah Yah Yah Ramen Promo Video",
+        description: "This video was produced for my client Yah Yah Yah Ramen. They wanted to share their story and passion for serving authentic ramen in Vancouver, so we created a documentary-style video that was published on their YouTube channel and other social media platforms.",
+        role: "Sole Production - Video Producer, Creative Director, Camera Operator, Interviewer, Narration Voice, Video Editor",
+        featured: true
+      },
+      {
+        id: "7",
+        vimeoId: "1090598916", // Demo video with working thumbnail
+        title: "MUJI Metrotown Opening Day Video",
+        description: "This video was produced for my client MUJI, who I supported in their efforts to open locations in Vancouver. This video shows the opening day for MUJI's Metrotown opening in Burnaby, BC, Canada.",
+        role: "Sole Production - Video Producer, Creative Director, Camera Operator, Video Editor"
+      },
+      {
+        id: "8",
+        vimeoId: "1090611114", // Demo video with working thumbnail
+        title: "ModelingCafe Demo Reel",
+        description: "I created this demo reel for ModelingCafe, a client I supported at CK Marketing through business development in North America. I selected their best portfolio samples to showcase their work.",
+        role: "Sole Production - Video Producer, Video Editor"
+      }
+    ]
+  },
+  {
+    company: "True North Entertainment Inc.",
+    sectionId: "truenorth-videos",
+    videos: [
+      {
+        id: "9",
+        vimeoId: "1090598141", // Demo video with working thumbnail
+        title: "Gateway to Prosperity",
+        description: "True North Entertainment was contracted by the BC Ministry of Transportation to produce corporate promotional videos. This piece focused on Canadas Pacific Gateway. I was video editor for this video, under the direction of the video producer, but I also traveled with the production crew as a boom operator and camera assistant.",
+        role: "Boom Operator, Camera Assistant, Video Editor",
+        featured: true
+      },
+      {
+        id: "10",
+        vimeoId: "1090590923", // Demo video with working thumbnail
+        title: "Partners in Prosperity",
+        description: "This was another video for the BC Ministry of Transportation, focused on Canada’s international trade infrastructure. I had the same roles.",
+        role: "Boom Operator, Camera Assistant, Video Editor"
+      },
+      {
+        id: "11",
+        vimeoId: "1090599153", // Demo video with working thumbnail
+        title: "BC LNG Promotional Video",
+        description: "This video was for BC's LNG sector. Once again, I was the video editor as well as worked on-location.",
+        role: "Boom Operator, Camera Assistant, Video Editor"
+      }
+    ]
+  }
+];
+---
+
+<Layout title="Ricco Yeung - Video Portfolio">
+  <main class="videos-page">
+    <section class="hero-section">
+      <div class="hero-content">
+        <h1 class="hero-title">Video Portfolio</h1>
+        <p class="hero-subtitle">A showcase of my video production work across various industries and companies</p>
+      </div>
+    </section>
+
+    <div class="videos-container">
+      {videoData.map((companyData) => (
+        <VideoSection 
+          company={companyData.company}
+          sectionId={companyData.sectionId}
+          videos={companyData.videos}
+        />
+      ))}
+    </div>
+
+    <!-- Video Modal -->
+    <div id="video-modal" class="video-modal" onclick="closeVideoModal()">
+      <div class="video-modal-content" onclick="event.stopPropagation()">
+        <button class="close-button" onclick="closeVideoModal()">&times;</button>
+        <div class="modal-video-wrapper">
+          <iframe 
+            id="modal-video-iframe"
+            src=""
+            frameborder="0" 
+            allow="autoplay; fullscreen; picture-in-picture; clipboard-write" 
+            class="modal-video-iframe"
+          ></iframe>
+        </div>
+        <h3 id="modal-video-title" class="modal-video-title"></h3>
+      </div>
+    </div>
+  </main>
+
+  <script is:inline>
+    function openVideoModal(vimeoId, title) {
+      const modal = document.getElementById('video-modal');
+      const iframe = document.getElementById('modal-video-iframe');
+      const titleElement = document.getElementById('modal-video-title');
+      
+      iframe.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&badge=0&autopause=0&player_id=0&app_id=58479`;
+      titleElement.textContent = title;
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeVideoModal() {
+      const modal = document.getElementById('video-modal');
+      const iframe = document.getElementById('modal-video-iframe');
+      
+      iframe.src = '';
+      modal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        closeVideoModal();
+      }
+    });
+  </script>
+</Layout>
+
+<style>
+  .videos-page {
+    padding-top: 80px; /* Account for fixed navigation */
+    min-height: 100vh;
+    background: var(--background);
+  }
+
+  .hero-section {
+    padding: 4rem 2rem;
+    text-align: center;
+    background: var(--background);
+  }
+
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .hero-title {
+    font-size: 3.5rem;
+    margin: 0 0 1rem 0;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+    color: var(--text);
+    opacity: 0.8;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .videos-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+  }
+
+  /* Video Modal Styles */
+  .video-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    align-items: center;
+    justify-content: center;
+  }
+
+  .video-modal-content {
+    position: relative;
+    background: #fff;
+    border-radius: 12px;
+    padding: 2rem;
+    max-width: 85vw;
+    max-height: 85vh;
+    width: 100%;
+    max-width: 1000px;
+  }
+
+  .close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #666;
+    cursor: pointer;
+    z-index: 10000;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+  }
+
+  .close-button:hover {
+    background-color: #f0f0f0;
+    color: #333;
+  }
+
+  .modal-video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-video-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+  }
+
+  .modal-video-title {
+    font-size: 1.5rem;
+    margin: 0;
+    color: var(--text-dark);
+    font-weight: 600;
+    text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    .videos-page {
+      padding-top: 60px;
+    }
+
+    .hero-section {
+      padding: 2rem 1rem;
+    }
+
+    .hero-title {
+      font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+    }
+
+    .videos-container {
+      padding: 0 1rem 2rem;
+    }
+
+    .video-modal-content {
+      padding: 1rem;
+      margin: 1rem;
+    }
+  }
+</style> 

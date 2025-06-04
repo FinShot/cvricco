@@ -1,0 +1,130 @@
+---
+import ImageGallery from './ImageGallery.astro';
+import { PortableText } from '@portabletext/react';
+import { portableTextComponents } from '../lib/portableTextComponents';
+
+interface Props {
+  id: string;
+  company: string;
+  role: string;
+  period: string;
+  description: any; // Changed from string to any to support Portable Text
+  sectionId: string;
+  images?: {
+    thumbnail: string;
+    full: string;
+    alt: string;
+  }[];
+}
+
+const { id, company, role, period, description, sectionId, images = [] } = Astro.props;
+---
+
+<section 
+  id={sectionId} 
+  class="experience-card"
+>
+  <div class="card-content">
+    <div class="text-content">
+      <h3 class="company">{company}</h3>
+      <h4 class="role">{role}</h4>
+      <p class="period">{period}</p>
+      <div class="description">
+        {Array.isArray(description) ? (
+          <PortableText value={description} components={portableTextComponents} />
+        ) : (
+          <p>{description}</p>
+        )}
+      </div>
+    </div>
+    {images.length > 0 && 
+      <div class="gallery-container">
+        <ImageGallery images={images} />
+      </div>
+    }
+  </div>
+</section>
+
+<style>
+  .experience-card {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 1rem;
+    scroll-margin-top: 100px;
+  }
+
+  .card-content {
+    background: var(--card-background);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  .card-content:hover {
+    transform: translateY(-16px);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+  }
+
+  .text-content {
+    padding: 2.5rem 2.5rem 1.5rem;
+    color: var(--text-dark);
+  }
+
+  .company {
+    font-size: 2.2rem;
+    margin: 0;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+  }
+
+  .role {
+    font-size: 1.4rem;
+    margin: 0.5rem 0;
+    color: var(--text-dark);
+  }
+
+  .period {
+    font-size: 1rem;
+    color: #666;
+    margin: 0.5rem 0;
+  }
+
+  .description {
+    margin: 1rem 0 0;
+    line-height: 1.6;
+    color: #4a5568;
+    font-size: 0.75rem;
+  }
+
+  .gallery-container {
+    max-width: 90%; /* Make gallery container smaller */
+    margin: 0 auto 2rem auto; /* Center the gallery and add bottom margin */
+  }
+
+  @media (max-width: 768px) {
+    .experience-card {
+      padding: 0.5rem;
+      scroll-margin-top: 80px;
+    }
+    
+    .text-content {
+      padding: 1.5rem 1.5rem 1rem;
+    }
+    
+    .company {
+      font-size: 1.8rem;
+    }
+    
+    .role {
+      font-size: 1.2rem;
+    }
+
+    .gallery-container {
+      max-width: 95%;
+    }
+  }
+</style>

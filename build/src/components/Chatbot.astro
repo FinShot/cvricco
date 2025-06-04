@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.data === "typing") {
           const typingMsg = document.createElement('div');
           typingMsg.className = 'message bot typing-message';
-          typingMsg.innerHTML = '<div class="message-content">Ricco is typing...</div>';
+          typingMsg.innerHTML = '<div class="message-content typing-text">Ricco is typing...</div>';
           messagesContainer.appendChild(typingMsg);
           messagesContainer.scrollTop = messagesContainer.scrollHeight;
         } else {
@@ -411,9 +411,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   
   .typing-message .message-content {
-    background-color: #f0f0f0;
-    color: #333333;
+    background-color: #f0f0f0 !important;
+    color: #333333 !important;
     border-bottom-left-radius: 4px;
+  }
+  
+  .typing-text {
+    color: #333333 !important;
+    background-color: #f0f0f0 !important;
+  }
+  
+  .message.bot .typing-text {
+    color: #333333 !important;
   }
   
   .typing-indicator .dot {

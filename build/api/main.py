@@ -77,47 +77,39 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
             await websocket.send_text("typing")
             
             print("Calling OpenAI API...")
-            response = client.chat.completions.create(
-                model="gpt-4-turbo-preview",
-                messages=conversation_history + [
-                    {"role": "user", "content": message},
-                    {
-                        "role": "system",
-                        "content": "Format your response as a complete message that fits within 75 tokens. If you need more space, end with a natural stopping point and ask if they want more details."
-                    }
-                ],
-                functions=[{
-                    "name": "send_chat_response",
-                    "description": "Send a complete chat response",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "response": {
-                                "type": "string",
-                                "description": "The complete response that must fit within space and not cut off mid-sentence"
-                            }
-                        },
-                        "required": ["response"]
-                    }
-                }],
-                function_call={"name": "send_chat_response"},
-                max_tokens=75,
-                temperature=0.7
-            )
-            print("Got response from OpenAI")
-            
-            # Extract the response from the function call
-            function_response = response.choices[0].message.function_call.arguments
-            ai_response = json.loads(function_response)["response"]
-            
-            conversation_history.append({"role": "user", "content": message})
-            conversation_history.append({"role": "assistant", "content": ai_response})
-            
-            await websocket.send_text(ai_response)
+            try:
+                response = client.chat.completions.create(
+                    model="gpt-4-turbo-preview",
+                    messages=conversation_history + [
+                        {"role": "user", "content": message},
+                        {
+                            "role": "system",
+                            "content": "Keep your response concise and complete. If you need more space, end with a natural stopping point and ask if they want more details."
+                        }
+                    ],
+                    max_tokens=150,
+                    temperature=0.7
+                )
+                print("Got response from OpenAI")
+                
+                # Extract the response directly from the message content
+                ai_response = response.choices[0].message.content
+                
+                conversation_history.append({"role": "user", "content": message})
+                conversation_history.append({"role": "assistant", "content": ai_response})
+                
+                await websocket.send_text(ai_response)
+                
+            except Exception as api_error:
+                print(f"OpenAI API Error: {api_error}")
+                await websocket.send_text("Sorry, I'm having trouble processing your message right now. Please try again.")
             
     except Exception as e:
-        print(f"Error: {e}")
-        await websocket.close()
+        print(f"WebSocket Error: {e}")
+        try:
+            await websocket.close()
+        except:
+            pass
 
 if __name__ == "__main__":
     import uvicorn

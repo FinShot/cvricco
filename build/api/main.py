@@ -44,91 +44,33 @@ app.add_middleware(
 
 @app.websocket("/ws/{client_id}")
 async def websocket_endpoint(websocket: WebSocket, client_id: str):
-    print(f"New connection from {client_id}")
     await websocket.accept()
-    print("WebSocket accepted")
-    
-    print("Starting with website content length:", len(website_content))
-    system_prompt = f"""[RICCO_YEUNG_CV_PAGE_ASSISTANT_ONLY]
-    You are Ricco Yeung's CV assistant. Here is his CV content:
-    {website_content}
-    
-    CRITICAL RULES:
-    1. You are ONLY allowed to discuss Ricco's CV, background, and experience
-    2. If anyone asks about ricco.AI business services, say "For business inquiries, please visit ricco.AI"
-    3. Your responses must be based on the CV content above
-    4. Keep responses short and complete
-    5. Be specific about companies and dates from Ricco's career history
-
-    FORBIDDEN:
-    - Never give business advice
-    - Never suggest consultations or meetings
-    - Never discuss anything not related to Ricco Yeung or the companies he worked for or projects he worked on"""
-
-    conversation_history = [
-        {"role": "system", "content": system_prompt}
-    ]
-    print("Conversation history initialized")
     
     try:
         while True:
-            print("Waiting for message...")
             message = await websocket.receive_text()
-            print(f"Received message: {message}")
+            await websocket.send_text("typing")
             
-            try:
-                await websocket.send_text("typing")
-                print("Sent typing indicator")
-            except Exception as send_error:
-                print(f"Error sending typing indicator: {send_error}")
-                break
-            
-            print("Calling OpenAI API...")
             try:
                 response = client.chat.completions.create(
-                    model="gpt-4-turbo-preview",
-                    messages=conversation_history + [
-                        {"role": "user", "content": message},
-                        {
-                            "role": "system",
-                            "content": "Keep your response concise and complete. If you need more space, end with a natural stopping point and ask if they want more details."
-                        }
+                    model="gpt-3.5-turbo",
+                    messages=[
+                        {"role": "system", "content": "You are Ricco Yeung's CV assistant. Answer questions about his background and experience professionally."},
+                        {"role": "user", "content": message}
                     ],
-                    max_tokens=150,
-                    temperature=0.7
+                    max_tokens=100
                 )
-                print("Got response from OpenAI")
                 
-                # Extract the response directly from the message content
                 ai_response = response.choices[0].message.content
-                print(f"AI Response: {ai_response[:100]}...")
+                await websocket.send_text(ai_response)
                 
-                conversation_history.append({"role": "user", "content": message})
-                conversation_history.append({"role": "assistant", "content": ai_response})
-                
-                try:
-                    await websocket.send_text(ai_response)
-                    print("Sent AI response successfully")
-                except Exception as send_error:
-                    print(f"Error sending AI response: {send_error}")
-                    break
-                
-            except Exception as api_error:
-                print(f"OpenAI API Error: {api_error}")
-                try:
-                    await websocket.send_text("Sorry, I'm having trouble processing your message right now. Please try again.")
-                except Exception as send_error:
-                    print(f"Error sending error message: {send_error}")
-                    break
+            except Exception as e:
+                await websocket.send_text("Sorry, I'm having trouble right now. Please try again.")
             
     except WebSocketDisconnect:
-        print(f"Client {client_id} disconnected normally")
-    except Exception as e:
-        print(f"WebSocket Error: {e}")
-        import traceback
-        print(f"Full traceback: {traceback.format_exc()}")
-    finally:
-        print(f"WebSocket connection ended for {client_id}")
+        pass
+    except Exception:
+        pass
 
 if __name__ == "__main__":
     import uvicorn

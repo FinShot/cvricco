@@ -6,6 +6,7 @@ interface Video {
   description: string;
   role: string;
   featured?: boolean;
+  soloProduction?: boolean;
 }
 
 interface Props {
@@ -46,6 +47,9 @@ const additionalVideos = videos.filter(video => video.id !== featuredVideo.id);
         <div class="video-info">
           <h3 class="video-title">{featuredVideo.title}</h3>
           <p class="video-description">{featuredVideo.description}</p>
+          {featuredVideo.soloProduction && (
+            <div class="sole-production-label">Solo Production</div>
+          )}
           <div class="video-role">
             <strong>My Role:</strong> {featuredVideo.role}
           </div>
@@ -76,6 +80,9 @@ const additionalVideos = videos.filter(video => video.id !== featuredVideo.id);
                   <div class="thumbnail-info">
                     <h5 class="thumbnail-title">{video.title}</h5>
                     <p class="thumbnail-description">{video.description}</p>
+                    {video.soloProduction && (
+                      <div class="sole-production-label small">Solo Production</div>
+                    )}
                     <div class="thumbnail-role">
                       <strong>My Role:</strong> {video.role}
                     </div>
@@ -193,6 +200,19 @@ const additionalVideos = videos.filter(video => video.id !== featuredVideo.id);
     margin: 0 0 1rem 0;
     color: #4a5568;
     font-size: 0.95rem;
+  }
+
+  .sole-production-label {
+    color: #dc2626;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin: 0 0 1rem 0;
+    letter-spacing: 0.5px;
+  }
+
+  .sole-production-label.small {
+    font-size: 0.7rem;
+    margin: 0 0 0.5rem 0;
   }
 
   .video-role {

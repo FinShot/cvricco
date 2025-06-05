@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.data === "typing") {
           const typingMsg = document.createElement('div');
           typingMsg.className = 'message bot typing-message';
-          typingMsg.innerHTML = '<div class="message-content typing-text">Ricco is typing...</div>';
+          typingMsg.innerHTML = '<div class="message-content">Ricco is typing...</div>';
           messagesContainer.appendChild(typingMsg);
           messagesContainer.scrollTop = messagesContainer.scrollHeight;
         } else {
@@ -121,24 +121,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageTemplate = document.querySelector<HTMLTemplateElement>('#message-template');
     if (!messagesContainer || !messageTemplate) return;
     
-    // Handle typing indicator
-    if (content === "typing") {
-      const typingDiv = document.createElement('div');
-      typingDiv.className = 'message bot typing-indicator';
-      typingDiv.innerHTML = `
-        <div class="message-content">
-          <span class="dot"></span>
-          <span class="dot"></span>
-          <span class="dot"></span>
-        </div>
-      `;
-      messagesContainer.appendChild(typingDiv);
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
-      return;
-    }
-    
     // Remove existing typing indicator
-    const existingIndicator = messagesContainer.querySelector('.typing-indicator');
+    const existingIndicator = messagesContainer.querySelector('.typing-message');
     if (existingIndicator) {
       existingIndicator.remove();
     }
@@ -187,6 +171,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
+  
+<style is:global>
+  @keyframes fade {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+</style>
   
 <style>
   .chatbot-container {
@@ -285,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
     flex: 1;
     padding: 1rem;
     overflow-y: auto;
-    background: #ffffff;
+    background: #2a2a2a;
     display: flex;
     flex-direction: column;
   }
@@ -316,8 +307,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   .bot .message-content {
-    background-color: #f0f0f0;
-    color: #000000;
+    background-color: #404040;
+    color: #ffffff;
     border-bottom-left-radius: 4px;
     margin-right: 32px;
   }
@@ -402,53 +393,9 @@ document.addEventListener('DOMContentLoaded', () => {
     margin-bottom: 10px;
   }
   
-  .typing-indicator .message-content {
-    padding: 8px 16px;
-    background-color: #f0f0f0;
-    border-radius: 18px;
-    border-bottom-left-radius: 4px;
-    color: #333333;
-  }
-  
   .typing-message .message-content {
-    background-color: #f0f0f0 !important;
-    color: #333333 !important;
+    background-color: #404040 !important;
+    color: #ffffff !important;
     border-bottom-left-radius: 4px;
-  }
-  
-  .typing-text {
-    color: #333333 !important;
-    background-color: #f0f0f0 !important;
-  }
-  
-  .message.bot .typing-text {
-    color: #333333 !important;
-  }
-  
-  .typing-indicator .dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    margin-right: 4px;
-    background-color: #666666;
-    border-radius: 50%;
-    animation: bounce 1.4s infinite;
-  }
-  
-  .typing-indicator .dot:nth-child(2) {
-    animation-delay: 0.2s;
-  }
-  
-  .typing-indicator .dot:nth-child(3) {
-    animation-delay: 0.4s;
-  }
-  
-  @keyframes bounce {
-    0%, 60%, 100% {
-      transform: translateY(0);
-    }
-    30% {
-      transform: translateY(-4px);
-    }
   }
 </style>

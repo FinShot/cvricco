@@ -77,11 +77,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
       ws.onmessage = (event) => {
         if (event.data === "typing") {
-          const typingMsg = document.createElement('div');
-          typingMsg.className = 'message bot typing-message';
-          typingMsg.innerHTML = '<div class="message-content">Ricco is typing...</div>';
-          messagesContainer.appendChild(typingMsg);
-          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+          // Remove any existing typing indicator
+          const existingTyping = messagesContainer.querySelector('.typing-message');
+          if (existingTyping) existingTyping.remove();
+          
+          // Create typing message using the same template as regular messages
+          const messageTemplate = document.querySelector<HTMLTemplateElement>('#message-template');
+          if (messageTemplate) {
+            const messageElement = messageTemplate.content.cloneNode(true) as HTMLElement;
+            const message = messageElement.querySelector('.message');
+            const messageContent = messageElement.querySelector('.message-content');
+            
+            if (message && messageContent) {
+              message.classList.add('bot', 'typing-message');
+              messageContent.textContent = 'Ricco is typing...';
+              messagesContainer.appendChild(messageElement);
+              messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+          }
         } else {
           const typingMsg = messagesContainer.querySelector('.typing-message');
           if (typingMsg) typingMsg.remove();
@@ -393,9 +406,10 @@ document.addEventListener('DOMContentLoaded', () => {
     margin-bottom: 10px;
   }
   
-  .typing-message .message-content {
+  .typing-message.message.bot .message-content {
     background-color: #404040 !important;
     color: #ffffff !important;
     border-bottom-left-radius: 4px;
+    animation: fade 1.5s ease-in-out infinite !important;
   }
 </style>

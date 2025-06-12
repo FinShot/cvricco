@@ -12,7 +12,7 @@ const videoData = [
         id: "1",
         vimeoId: "1090597816", // Demo video with working thumbnail
         title: "Filmora 14 Launch Video",
-        description: "I co-led the GTM strategy for Filmora Version 14, which included creating this promotional introduction video. My team and I developed the storyboard and creative direction, resulting in a clean, focused narrative tailored to our key target segments.",
+        description: "I co-led the GTM strategy for Filmora Version 14, which included creating this promotional introduction video. My team and I developed the storyboard and creative direction, resulting in a clean, focused narrative tailored to our key target segments. This video was produced by an external production company in China with our direction and supervision.",
         role: "Co-creative Director, Storyboard, Scriptwriter, Post-production Supervisor",
         featured: true
       }
@@ -83,7 +83,7 @@ const videoData = [
     videos: [
       {
         id: "6",
-        vimeoId: "1090624428", // Demo video with working thumbnail
+        vimeoId: "1090972834", // Demo video with working thumbnail
         title: "Yah Yah Yah Ramen Promo Video",
         description: "This video was produced for my client Yah Yah Yah Ramen. They wanted to share their story and passion for serving authentic ramen in Vancouver, so we created a documentary-style video that was published on their YouTube channel and other social media platforms.",
         role: "Video Producer, Creative Director, Camera Operator, Interviewer, Narration Voice, Video Editor",
@@ -168,6 +168,7 @@ const videoData = [
             src=""
             frameborder="0" 
             allow="autoplay; fullscreen; picture-in-picture; clipboard-write" 
+            allowfullscreen
             class="modal-video-iframe"
           ></iframe>
         </div>
@@ -182,7 +183,7 @@ const videoData = [
       const iframe = document.getElementById('modal-video-iframe');
       const titleElement = document.getElementById('modal-video-title');
       
-      iframe.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&badge=0&autopause=0&player_id=0&app_id=58479`;
+      iframe.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&badge=0&autopause=0&player_id=0&app_id=58479&playsinline=0`;
       titleElement.textContent = title;
       modal.style.display = 'flex';
       document.body.style.overflow = 'hidden';
@@ -346,6 +347,24 @@ const videoData = [
     .video-modal-content {
       padding: 1rem;
       margin: 1rem;
+      max-width: 95vw;
+      max-height: 95vh;
+    }
+
+    .modal-video-wrapper {
+      margin-bottom: 1rem;
+    }
+
+    .modal-video-title {
+      font-size: 1.2rem;
+    }
+
+    .close-button {
+      top: 0.5rem;
+      right: 0.5rem;
+      width: 35px;
+      height: 35px;
+      font-size: 1.5rem;
     }
   }
 </style> 

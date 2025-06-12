@@ -33,6 +33,7 @@ const additionalVideos = videos.filter(video => video.id !== featuredVideo.id);
           <div class="video-thumbnail">
             <img 
               src={`https://vumbnail.com/${featuredVideo.vimeoId}.jpg`}
+              onerror={`this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQwIiBoZWlnaHQ9IjM2MCIgdmlld0JveD0iMCAwIDY0MCAzNjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI2NDAiIGhlaWdodD0iMzYwIiBmaWxsPSIjMzMzIi8+CjxjaXJjbGUgY3g9IjMyMCIgY3k9IjE4MCIgcj0iNDAiIGZpbGw9IiM2NjYiLz4KPHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSIzMDgiIHk9IjE2OCI+CjxwYXRoIGQ9Ik04IDV2MTRMITE5IDEyTDggNVoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo8L3N2Zz4K'`}
               alt={featuredVideo.title}
               class="thumbnail-image"
             />
@@ -67,6 +68,7 @@ const additionalVideos = videos.filter(video => video.id !== featuredVideo.id);
                   <div class="small-thumbnail-wrapper" onclick={`openVideoModal('${video.vimeoId}', '${video.title}')`}>
                     <img 
                       src={`https://vumbnail.com/${video.vimeoId}.jpg`}
+                      onerror={`this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQwIiBoZWlnaHQ9IjM2MCIgdmlld0JveD0iMCAwIDY0MCAzNjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI2NDAiIGhlaWdodD0iMzYwIiBmaWxsPSIjMzMzIi8+CjxjaXJjbGUgY3g9IjMyMCIgY3k9IjE4MCIgcj0iNDAiIGZpbGw9IiM2NjYiLz4KPHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSIzMDgiIHk9IjE2OCI+CjxwYXRoIGQ9Ik04IDV2MTRMETE5IDEyTDggNVoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo8L3N2Zz4K'`}
                       alt={video.title}
                       class="small-thumbnail-image"
                     />
